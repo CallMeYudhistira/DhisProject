@@ -13,6 +13,12 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return view('index');
+$router->group([
+    'middleware' => ['throttle', 'shield']
+], function () use ($router) {
+
+    $router->get('/', function () {
+        return view('index');
+    });
+
 });

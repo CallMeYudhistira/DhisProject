@@ -88,8 +88,9 @@
 
     <script>
         const texts = [
-            "Upload Fun Project.",
-            "Learn Programming.",
+            "Hidup Jokowi.",
+            "Hidup Prabowo.",
+            "Jaya Indonesiaku.",
             "https://github.com/CallMeYudhistira/"
         ];
 
