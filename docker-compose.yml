@@ -1,0 +1,9 @@
+services:
+  lumen:
+    build: .
+    container_name: index
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www
+    restart: unless-stopped
