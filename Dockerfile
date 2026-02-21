@@ -2,11 +2,14 @@ FROM php:8.2-alpine
 
 WORKDIR /var/www
 
-# Install dependency kecil saja
+# Install dependency + redis extension
 RUN apk add --no-cache \
     git \
     unzip \
-    zip
+    zip \
+    $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Copy composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

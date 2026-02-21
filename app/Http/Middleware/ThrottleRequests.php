@@ -3,24 +3,37 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Cache;
 
 class ThrottleRequests
 {
-    protected $maxAttempts = 20; // jumlah request
-    protected $decaySeconds = 60; // per berapa detik
+    protected $maxAttempts = 20;
+    protected $decaySeconds = 60;
 
     public function handle($request, Closure $next)
     {
         $key = $this->resolveRequestSignature($request);
 
-        $attempts = Cache::get($key, 0);
+        $redis = new \Redis();
+        $redis->connect(env('REDIS_HOST', 'redis'), env('REDIS_PORT', 6379));
 
-        if ($attempts >= $this->maxAttempts) {
-            return view('429');
+        $attempts = $redis->incr($key);
+
+        // set TTL hanya saat pertama kali dibuat
+        if ($attempts == 1) {
+            $redis->expire($key, $this->decaySeconds);
         }
 
-        Cache::put($key, $attempts + 1, $this->decaySeconds);
+        if ($attempts > $this->maxAttempts) {
+
+            $ttl = $redis->ttl($key);
+
+            return response(
+                view('429', [
+                    'seconds' => $ttl > 0 ? $ttl : $this->decaySeconds
+                ]),
+                429
+            );
+        }
 
         return $next($request);
     }
@@ -28,8 +41,8 @@ class ThrottleRequests
     protected function resolveRequestSignature($request)
     {
         return sha1(
-            $request->ip() . '|' .
-            $request->method() . '|' .
+            $request->ip().'|'.
+            $request->method().'|'.
             $request->path()
         );
     }

@@ -14,7 +14,7 @@
 */
 
 $router->group([
-    'middleware' => ['throttle', 'shield']
+    'middleware' => ['throttle']
 ], function () use ($router) {
 
     $router->get('/', function () {

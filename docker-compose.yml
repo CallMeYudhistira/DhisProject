@@ -1,7 +1,17 @@
 services:
-  lumen:
+  app:
     build: .
     container_name: index
     ports:
       - "8000:8000"
     restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      - CACHE_DRIVER=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  redis:
+    image: redis:7-alpine
+    container_name: dhis_redis
