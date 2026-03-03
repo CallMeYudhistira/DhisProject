@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -17,18 +18,17 @@
 
         .hero {
             min-height: 100vh;
-            background: linear-gradient(135deg, #ffffff 30%, #d8d8d8);
             color: black;
             padding: 0 15px;
         }
 
-        .hero h1 {
+        .hero div h1 {
             font-size: 2.7rem;
             /* Tambahkan baris di bawah ini */
             animation: floating 3s ease-in-out infinite;
         }
 
-        .hero h4 {
+        .hero div h4 {
             font-size: 1.7rem;
             font-weight: 500;
         }
@@ -80,12 +80,7 @@
 
 <body>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero d-flex align-items-center text-center">
-        <div class="container">
-            @yield('content')
-        </div>
-    </section>
+    @yield('content')
 
 </body>
 

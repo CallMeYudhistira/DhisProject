@@ -1,11 +1,145 @@
 @extends('layouts.app')
-@section('title', 'DhisProject')
+@section('title', 'DhisProject - Portfolio')
 @section('content')
-    <h1 class="display-5 fw-bold mb-2">DhisLab</h1>
 
-    <p class="lead mt-3 mb-4">
-        <span id="typed-text"></span><span class="cursor">|</span>
-    </p>
+    <nav class="navbar navbar-expand-lg fixed-top transition-navbar" id="mainNavbar">
+        <div class="container">
+            {{-- <a class="navbar-brand fw-bold" href="#home">DhisLab</a> --}}
+            <div class="ms-auto d-flex align-items-center">
+                <a href="https://github.com/CallMeYudhistira" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-brands fa-github text-dark"></i>
+                </a>
+                <a href="https://wa.me/6281316560366" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-brands fa-whatsapp text-dark"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/yudhis-tira-063b95382/" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-brands fa-linkedin text-dark"></i>
+                </a>
+                <a href="mailto:tiray9272@gmail.com" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-regular fa-envelope text-dark"></i>
+                </a>
+                <a href="https://www.instagram.com/callmeudiss" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-brands fa-instagram text-dark"></i>
+                </a>
+                <a href="https://www.youtube.com/@callmeyudhistira9805" target="_blank" class="nav-link px-3 fs-5 transition-hover">
+                    <i class="fa-brands fa-youtube text-dark"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero d-flex align-items-center text-center min-vh-100 bg-light">
+        <div class="container">
+            <h1 class="display-2 fw-bolder mb-3 tracking-tight">DhisLab</h1>
+            <p class="fs-4 text-secondary mb-4">
+                <span id="typed-text"></span><span class="cursor">|</span>
+            </p>
+            <a href="#portfolio" class="btn-dark rounded-pill mt-4 transition-hover btn btn-lg rounded-pill px-4">
+                View My Work ↓
+            </a>
+        </div>
+    </section>
+
+    <div id="portfolio">
+        @forelse($projects as $project)
+            <section
+                class="project-section min-vh-100 d-flex align-items-center {{ $loop->even ? 'bg-light' : 'bg-white' }} py-5">
+                <div class="container">
+                    <div class="row align-items-center {{ $loop->even ? 'flex-row-reverse' : '' }} g-5">
+
+                        <div class="col-lg-6">
+                            <div class="project-image-wrapper shadow-lg rounded-4 overflow-hidden transition-hover"
+                                style="aspect-ratio: 16 / 9;">
+                                @if ($project->preview)
+                                    <img src="{{ $project->preview }}" class="w-100 h-100" alt="{{ $project->title }}"
+                                        style="object-fit: cover;">
+                                @else
+                                    <div
+                                        class="bg-secondary d-flex align-items-center justify-content-center text-white w-100 h-100">
+                                        <span class="fs-4">No Preview Available</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="project-info {{ $loop->even ? 'pe-lg-5' : 'ps-lg-5' }}">
+                                <span class="badge bg-dark mb-3 px-3 py-2 rounded-pill">Project
+                                    {{ $loop->iteration }}</span>
+                                <h2 class="display-4 fw-bold mb-4">{{ $project->title }}</h2>
+                                <p class="lead text-muted mb-4" style="line-height: 1.8;">
+                                    {{ $project->description }}
+                                </p>
+                                @if ($project->url)
+                                    <a class="btn btn-outline-dark btn-lg rounded-pill px-4" href="{{ $project->url }}" target="_blank">View
+                                        Details</a>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        @empty
+            <section class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+                <div class="text-center">
+                    <h2 class="fw-bold mb-3">No projects yet</h2>
+                    <p class="text-muted lead">Use a seeder or add data to the database to see your work here!</p>
+                </div>
+            </section>
+        @endforelse
+    </div>
+
+    <style>
+        /* Navbar Transitions */
+        .transition-navbar {
+            padding: 20px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        /* Smooth scrolling for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Hero Typography */
+        .tracking-tight {
+            letter-spacing: -0.05em;
+        }
+
+        /* Cursor Animation for Typewriter */
+        .cursor {
+            font-weight: bold;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Hover Transitions */
+        .transition-hover {
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+        }
+
+        .transition-hover:hover {
+            transform: translateY(-8px);
+        }
+
+        .project-image-wrapper {
+            position: relative;
+            display: block;
+        }
+    </style>
 
     <script>
         const texts = [
@@ -45,6 +179,19 @@
             setTimeout(typeEffect, speed);
         }
 
-        typeEffect();
+        // Initialize typing effect and scroll detector on load
+        document.addEventListener('DOMContentLoaded', () => {
+            typeEffect();
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('mainNavbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            });
+        });
     </script>
 @endsection

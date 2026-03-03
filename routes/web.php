@@ -18,7 +18,8 @@ $router->group([
 ], function () use ($router) {
 
     $router->get('/', function () {
-        return view('index');
+        $projects = \App\Models\Project::all();
+        return view('index', compact('projects'));
     });
 
 });
