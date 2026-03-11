@@ -45,32 +45,50 @@ class ShieldFirewall
             return view('429');
         }
 
-        // ===== 4. Suspicious User Agent =====
-        $badAgents = ['curl','python','wget','scrapy','httpclient'];
+        // ===== 4. Suspicious User Agent & Bots =====
+        $badAgents = [
+            'curl','python','wget','scrapy','httpclient','bot','spider','crawl',
+            'libwww','zgrab','censys','sqlmap','nmap','burp','acunetix','hydra'
+        ];
 
         foreach ($badAgents as $bad) {
-            if (stripos($ua,$bad) !== false) {
-                Cache::increment("sus:$ip");
+            if (stripos($ua, $bad) !== false) {
+                Cache::increment("sus:$ip", 5); // Heavier penalty for known bots/tools
             }
         }
 
-        // ===== 5. Suspicion Score System =====
-        $sus = Cache::get("sus:$ip",0);
+        // ===== 5. Malicious Pattern Detection (Simple XSS/SQLi) =====
+        $query = $request->fullUrl();
+        $maliciousPatterns = [
+            '/<script/i', '/union\s+select/i', '/exec\s*\(/i', '/base64_/i',
+            '/[\'"]\s*or\s*[\'"]?\d/i', '/drop\s+table/i', '/<iframe/i'
+        ];
 
-        if ($sus >= 10) {
-            Cache::put("block:$ip", true, 1200);
+        foreach ($maliciousPatterns as $pattern) {
+            if (preg_match($pattern, $query) || preg_match($pattern, json_encode($request->all()))) {
+                Cache::put("block:$ip", true, 3600); // Block for 1 hour immediately
+                return view('403');
+            }
+        }
+
+        // ===== 6. Suspicion Score System =====
+        $sus = Cache::get("sus:$ip", 0);
+
+        if ($sus >= 15) {
+            Cache::put("block:$ip", true, 3600); // Block for 1 hour
             return view('403');
         }
 
-        // ===== 6. Adaptive Rate Limit =====
+        // ===== 7. Adaptive Rate Limit =====
         $rateKey = "rate:$fingerprint";
         $rate = Cache::increment($rateKey);
-        Cache::put($rateKey,$rate,60);
+        Cache::put($rateKey, $rate, 60);
 
-        $limit = $sus > 5 ? 20 : 60;
+        // More restrictive if suspicious
+        $limit = $sus > 5 ? 15 : 45;
 
         if ($rate > $limit) {
-            return view('429');
+            return view('429', ['seconds' => 60]);
         }
 
         return $next($request);

@@ -16,6 +16,11 @@
             font-family: 'Montserrat', sans-serif;
         }
 
+        body {
+            background-color: #fcfcfc;
+            color: #333;
+        }
+
         .hero {
             min-height: 100vh;
             color: black;
@@ -24,7 +29,6 @@
 
         .hero div h1 {
             font-size: 2.7rem;
-            /* Tambahkan baris di bawah ini */
             animation: floating 3s ease-in-out infinite;
         }
 
@@ -33,27 +37,16 @@
             font-weight: 500;
         }
 
-        /* Definisi animasi melayang */
         @keyframes floating {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-15px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             max-width: 600px;
             margin: 0 auto;
-            white-space: nowrap;
-            overflow: hidden;
         }
 
         .cursor {
@@ -63,25 +56,46 @@
         }
 
         @keyframes blink {
-            0% {
-                opacity: 1;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
+        /* Responsive spacing fixes */
+        @media (max-width: 576px) {
+            .py-5 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+            .px-4 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
         }
     </style>
 </head>
 
 <body>
 
+    <script>
+        // Simple security verification for management routes
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+
+            if (currentPath.startsWith('/projects')) {
+                const sessionKey = 'dhis_auth';
+                const authCode = "{{ env('MANAGEMENT_KEYWORD', 'keyword') }}";
+
+                if (localStorage.getItem(sessionKey) !== authCode) {
+                    const input = prompt("Verification required to access management page:");
+
+                    if (input === authCode) {
+                        localStorage.setItem(sessionKey, authCode);
+                    } else {
+                        alert("Unauthorized access!");
+                        window.location.href = "/";
+                    }
+                }
+            }
+        });
+    </script>
+
     @yield('content')
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

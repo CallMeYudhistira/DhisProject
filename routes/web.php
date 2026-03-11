@@ -22,4 +22,12 @@ $router->group([
         return view('index', compact('projects'));
     });
 
+    // CRUD Projects
+    $router->get('/projects', 'ProjectController@index');
+    $router->get('/projects/create', 'ProjectController@create');
+    $router->post('/projects', 'ProjectController@store');
+    $router->get('/projects/{id}/edit', 'ProjectController@edit');
+    $router->post('/projects/{id}', 'ProjectController@update');
+    $router->post('/projects/{id}/delete', 'ProjectController@destroy');
+
 });
