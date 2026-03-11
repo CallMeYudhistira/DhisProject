@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Manage Projects')
 @section('content')
-<div class="container py-4 py-md-5">
+<div class="container py-4 py-md-5" id="projects">
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
         <h2 class="h3 mb-0">Manage Projects</h2>
         <a href="{{ url('/projects/create') }}" class="btn btn-dark rounded-pill px-4 shadow-sm">

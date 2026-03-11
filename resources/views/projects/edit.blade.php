@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Project')
 @section('content')
-<div class="container py-4 py-md-5">
+<div class="container py-4 py-md-5" id="projects">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">

@@ -2,43 +2,38 @@
 @section('title', 'DhisProject - Portfolio')
 @section('content')
 
-    <nav class="navbar navbar-expand-lg fixed-top transition-navbar" id="mainNavbar">
+    <nav class="navbar fixed-top transition-navbar" id="mainNavbar">
         <div class="container">
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navContent">
-                <div class="ms-auto d-flex align-items-center justify-content-center py-2 py-lg-0">
-                    <a href="https://github.com/CallMeYudhistira" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-brands fa-github text-dark"></i>
-                    </a>
-                    <a href="https://wa.me/6281316560366" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-brands fa-whatsapp text-dark"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/yudhis-tira-063b95382/" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-brands fa-linkedin text-dark"></i>
-                    </a>
-                    <a href="mailto:tiray9272@gmail.com" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-regular fa-envelope text-dark"></i>
-                    </a>
-                    <a href="https://www.instagram.com/callmeudiss" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-brands fa-instagram text-dark"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@callmeyudhistira9805" target="_blank" class="nav-link px-3 fs-5 transition-hover">
-                        <i class="fa-brands fa-youtube text-dark"></i>
-                    </a>
-                </div>
+            <div class="ms-auto d-flex align-items-center justify-content-center">
+                <a href="https://github.com/CallMeYudhistira" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-brands fa-github text-dark"></i>
+                </a>
+                <a href="https://wa.me/6281316560366" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-brands fa-whatsapp text-dark"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/yudhis-tira-063b95382/" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-brands fa-linkedin text-dark"></i>
+                </a>
+                <a href="mailto:tiray9272@gmail.com" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-regular fa-envelope text-dark"></i>
+                </a>
+                <a href="https://www.instagram.com/callmeudiss" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-brands fa-instagram text-dark"></i>
+                </a>
+                <a href="https://www.youtube.com/@callmeyudhistira9805" target="_blank" class="nav-link px-2 px-sm-3 fs-4 transition-hover">
+                    <i class="fa-brands fa-youtube text-dark"></i>
+                </a>
             </div>
         </div>
     </nav>
 
     <section id="home" class="hero d-flex align-items-center text-center min-vh-100 bg-light">
         <div class="container px-4">
-            <h1 class="display-2 fw-bolder mb-3 tracking-tight">DhisLab</h1>
-            <p class="fs-4 text-secondary mb-5">
+            <h1 class="display-2 fw-bolder mb-4 tracking-tight">DhisLab</h1>
+            <p class="fs-4 text-secondary mb-4">
                 <span id="typed-text"></span><span class="cursor">|</span>
             </p>
-            <a href="#portfolio" class="btn-dark rounded-pill mt-2 transition-hover btn btn-lg rounded-pill px-4">
+            <a href="#portfolio" class="btn-dark rounded-pill transition-hover mt-4 btn btn-lg rounded-pill px-4">
                 View My Work <i class="fa-solid fa-arrow-down ms-2"></i>
             </a>
         </div>
@@ -47,7 +42,7 @@
     <div id="portfolio">
         @forelse($projects as $project)
             <section class="project-section min-vh-100 d-flex align-items-center {{ $loop->even ? 'bg-light' : 'bg-white' }} py-5">
-                <div class="container px-4">
+                <div class="container px-3">
                     <div class="row align-items-center {{ $loop->even ? 'flex-row-reverse' : '' }} g-4 g-lg-5">
                         <div class="col-12 col-lg-6">
                             <div class="shadow-lg rounded-4 overflow-hidden transition-hover" style="aspect-ratio: 16 / 9;">

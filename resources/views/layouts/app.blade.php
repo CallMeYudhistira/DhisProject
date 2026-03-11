@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
+    <link rel="icon" type="image/x-icon" href="{{ url('favicon.ico') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -38,9 +39,17 @@
         }
 
         @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .hero p {
@@ -56,39 +65,65 @@
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
 
         /* Responsive spacing fixes */
         @media (max-width: 576px) {
-            .py-5 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
-            .px-4 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+            .py-5 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+
+            .px-4 {
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+            }
         }
     </style>
 </head>
 
-<body>
+<body id="page-body">
 
     <script>
-        // Simple security verification for management routes
+        (function() {
+            const currentPath = window.location.pathname;
+            if (currentPath.startsWith('/projects')) {
+                document.write('<style>#page-body { display: none !important; }</style>');
+            }
+        })();
+
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname;
+            const body = document.getElementById('page-body');
 
             if (currentPath.startsWith('/projects')) {
                 const sessionKey = 'dhis_auth';
-                const authCode = "{{ env('MANAGEMENT_KEYWORD', 'keyword') }}";
+                const authCode = "{{ env('MANAGEMENT_KEYWORD', 'callmeudiss @192.168.0.154') }}";
 
-                if (localStorage.getItem(sessionKey) !== authCode) {
+                if (localStorage.getItem(sessionKey) === authCode) {
+                    body.style.setProperty('display', 'block', 'important');
+                } else {
                     const input = prompt("Verification required to access management page:");
 
                     if (input === authCode) {
                         localStorage.setItem(sessionKey, authCode);
+                        body.style.setProperty('display', 'block', 'important');
                     } else {
                         alert("Unauthorized access!");
                         window.location.href = "/";
                     }
                 }
+            } else {
+                body.style.display = "block";
             }
         });
     </script>
