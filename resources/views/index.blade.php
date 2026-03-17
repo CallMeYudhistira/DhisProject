@@ -107,7 +107,6 @@
     <script>
         const texts = [
             "Hello World.",
-            "Prabowo, Jokowi, Bahlil? Jaya! Jaya!.",
             "Aku Yudis, Kamu Apa?",
             "https://github.com/CallMeYudhistira/"
         ];
