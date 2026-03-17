@@ -23,7 +23,7 @@ $router->group([
     });
 
     $router->get('/test', function () {
-        return "Ini test automasi";
+        return "Ini test automasi (1)";
     });
 
     // CRUD Projects
