@@ -22,10 +22,6 @@ $router->group([
         return view('index', compact('projects'));
     });
 
-    $router->get('/test', function () {
-        return "Hello World (6)";
-    });
-
     // CRUD Projects
     $router->get('/projects', 'ProjectController@index');
     $router->get('/projects/create', 'ProjectController@create');
