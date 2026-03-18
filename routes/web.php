@@ -23,7 +23,7 @@ $router->group([
     });
 
     $router->get('/test', function () {
-        return "Hello World (4)";
+        return "Hello World (5)";
     });
 
     // CRUD Projects
