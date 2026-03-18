@@ -12,11 +12,11 @@
     </section>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             let seconds = {{ $seconds }};
             const countdownElement = document.getElementById("countdown");
 
-            const interval = setInterval(function () {
+            const interval = setInterval(function() {
                 seconds--;
 
                 if (seconds <= 0) {
