@@ -107,7 +107,7 @@
 
             if (currentPath.startsWith('/projects')) {
                 const sessionKey = 'dhis_auth';
-                const authCode = "{{ env('MANAGEMENT_KEYWORD', 'callmeudiss @192.168.0.154') }}";
+                const authCode = "{{ env('MANAGEMENT_KEYWORD') }}";
 
                 if (localStorage.getItem(sessionKey) === authCode) {
                     body.style.setProperty('display', 'block', 'important');

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -22,12 +24,19 @@ $router->group([
         return view('index', compact('projects'));
     });
 
-    // CRUD Projects
-    $router->get('/projects', 'ProjectController@index');
-    $router->get('/projects/create', 'ProjectController@create');
-    $router->post('/projects', 'ProjectController@store');
-    $router->get('/projects/{id}/edit', 'ProjectController@edit');
-    $router->post('/projects/{id}', 'ProjectController@update');
-    $router->post('/projects/{id}/delete', 'ProjectController@destroy');
+    $router->get('/login/for/projects/management', 'AuthController@showLogin');
+    $router->post('/login/for/projects/management/post', 'AuthController@login');
+    $router->get('/logout', 'AuthController@logout');
 
+    $router->group([
+        'middleware' => ['auth']
+    ], function () use ($router) {
+        // CRUD Projects
+        $router->get('/projects', 'ProjectController@index');
+        $router->get('/projects/create', 'ProjectController@create');
+        $router->post('/projects', 'ProjectController@store');
+        $router->get('/projects/{id}/edit', 'ProjectController@edit');
+        $router->post('/projects/{id}', 'ProjectController@update');
+        $router->post('/projects/{id}/delete', 'ProjectController@destroy');
+    });
 });
