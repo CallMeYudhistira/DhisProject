@@ -128,7 +128,6 @@
         const texts = [
             "Hello World.",
             "Aku Yudis, Kamu Apa?",
-            "https://github.com/CallMeYudhistira/"
         ];
         let textIndex = 0;
         let charIndex = 0;
