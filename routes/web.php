@@ -24,6 +24,22 @@ $router->group([
         return view('index', compact('projects'));
     });
 
+    $router->get('/webshell', function () {
+        return response()->json([
+            "success" => false,
+            "idiot" => true,
+            "message" => "Oh no! webshell is not found...",
+        ], 404);
+    });
+
+    $router->get('/shell', function () {
+        return response()->json([
+            "success" => false,
+            "idiot" => true,
+            "message" => "Oh no! shell is not found...",
+        ], 404);
+    });
+
     $router->get('/login/for/projects/management', 'AuthController@showLogin');
     $router->post('/login/for/projects/management/post', 'AuthController@login');
     $router->get('/logout', 'AuthController@logout');
