@@ -1,75 +1,30 @@
-FROM php:8.2-alpine
+# Stage 1: Build the Vue.js SPA
+FROM node:20-alpine as build-stage
 
-WORKDIR /var/www
+WORKDIR /app
 
-# Install dependency + extensions
-RUN apk add --no-cache \
-    git \
-    unzip \
-    zip \
-    $PHPIZE_DEPS \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && docker-php-ext-install pdo_mysql
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Copy composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application
 COPY . .
-# Copy .env explicitly if it exists
-COPY .env* ./
 
-RUN composer install --no-dev --optimize-autoloader
+# Build the application for production
+RUN npm run build
 
-# Create entrypoint script with robust wait-for-db logic
-RUN echo '#!/bin/sh' > /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "=== DhisProject Entrypoint ==="' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Storage Setup ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Creating storage symlink..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'rm -rf public/storage && ln -s /var/www/storage/app/public /var/www/public/storage' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'mkdir -p storage/app/public/projects' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'chmod -R 777 storage bootstrap/cache' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Wait for MySQL ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Waiting for MySQL to be ready..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'MAX_RETRIES=30' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'RETRY=0' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'until nc -z -w2 db 3306 2>/dev/null; do' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  RETRY=$((RETRY + 1))' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  if [ "$RETRY" -ge "$MAX_RETRIES" ]; then' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    echo "ERROR: MySQL not reachable after $MAX_RETRIES attempts. Starting server anyway..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    break' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  fi' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  echo "  MySQL not ready yet (attempt $RETRY/$MAX_RETRIES)... waiting 2s"' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  sleep 2' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'done' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "MySQL is reachable! Waiting 3s extra for full init..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'sleep 3' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Wait for Redis ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Waiting for Redis..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'RETRY=0' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'until nc -z -w2 redis 6379 2>/dev/null; do' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  RETRY=$((RETRY + 1))' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  if [ "$RETRY" -ge 10 ]; then' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    echo "WARNING: Redis not reachable. Continuing anyway..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    break' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  fi' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  echo "  Redis not ready (attempt $RETRY/10)... waiting 1s"' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  sleep 1' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'done' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Run Migrations ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Running migrations..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'php artisan migrate --force || echo "Migration failed, but server will still start."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Start Server ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Starting server on port 8000..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'exec php -S 0.0.0.0:8000 -t public' >> /usr/local/bin/docker-entrypoint.sh && \
-    chmod +x /usr/local/bin/docker-entrypoint.sh
+# Stage 2: Serve the built application with Nginx
+FROM nginx:alpine as production-stage
 
-EXPOSE 8000
+# Copy the build output to Nginx's default public directory
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
+# Copy custom Nginx configuration for routing and security
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80 (or 8000 to match previous setup, let's stick to 80 for standard Nginx but map it in compose)
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
