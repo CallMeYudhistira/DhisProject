@@ -8,9 +8,10 @@ RUN apk add --no-cache \
     unzip \
     zip \
     $PHPIZE_DEPS \
+    postgresql-dev \
     && pecl install redis \
     && docker-php-ext-enable redis \
-    && docker-php-ext-install pdo_mysql
+    && docker-php-ext-install pdo_pgsql
 
 # Copy composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -31,22 +32,6 @@ RUN echo '#!/bin/sh' > /usr/local/bin/docker-entrypoint.sh && \
     echo 'rm -rf public/storage && ln -s /var/www/storage/app/public /var/www/public/storage' >> /usr/local/bin/docker-entrypoint.sh && \
     echo 'mkdir -p storage/app/public/projects' >> /usr/local/bin/docker-entrypoint.sh && \
     echo 'chmod -R 777 storage bootstrap/cache' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '# --- Wait for MySQL ---' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "Waiting for MySQL to be ready..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'MAX_RETRIES=30' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'RETRY=0' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'until nc -z -w2 db 3306 2>/dev/null; do' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  RETRY=$((RETRY + 1))' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  if [ "$RETRY" -ge "$MAX_RETRIES" ]; then' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    echo "ERROR: MySQL not reachable after $MAX_RETRIES attempts. Starting server anyway..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '    break' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  fi' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  echo "  MySQL not ready yet (attempt $RETRY/$MAX_RETRIES)... waiting 2s"' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo '  sleep 2' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'done' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'echo "MySQL is reachable! Waiting 3s extra for full init..."' >> /usr/local/bin/docker-entrypoint.sh && \
-    echo 'sleep 3' >> /usr/local/bin/docker-entrypoint.sh && \
     echo '' >> /usr/local/bin/docker-entrypoint.sh && \
     echo '# --- Wait for Redis ---' >> /usr/local/bin/docker-entrypoint.sh && \
     echo 'echo "Waiting for Redis..."' >> /usr/local/bin/docker-entrypoint.sh && \
