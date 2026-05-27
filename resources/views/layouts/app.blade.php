@@ -93,41 +93,6 @@
 
 <body id="page-body">
 
-    <script>
-        (function() {
-            const currentPath = window.location.pathname;
-            if (currentPath.startsWith('/projects')) {
-                document.write('<style>#page-body { display: none !important; }</style>');
-            }
-        })();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            const body = document.getElementById('page-body');
-
-            if (currentPath.startsWith('/projects')) {
-                const sessionKey = 'dhis_auth';
-                const authCode = "{{ env('MANAGEMENT_KEYWORD') }}";
-
-                if (localStorage.getItem(sessionKey) === authCode) {
-                    body.style.setProperty('display', 'block', 'important');
-                } else {
-                    const input = prompt("Verification required to access management page:");
-
-                    if (input === authCode) {
-                        localStorage.setItem(sessionKey, authCode);
-                        body.style.setProperty('display', 'block', 'important');
-                    } else {
-                        alert("Unauthorized access!");
-                        window.location.href = "/";
-                    }
-                }
-            } else {
-                body.style.display = "block";
-            }
-        });
-    </script>
-
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
