@@ -15,6 +15,10 @@
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-dark);
@@ -278,24 +282,24 @@ body {
     gap: 1rem;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid transparent;
     cursor: pointer;
 }
 
 .skill-card:hover {
-    transform: translateY(-8px) scale(1.05);
+    transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-color: rgba(99, 102, 241, 0.3); /* using primary-color */
 }
 
 .skill-card i {
     font-size: 4rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.6s ease;
 }
 
 .skill-card:hover i {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .skill-card span {
