@@ -121,5 +121,144 @@
             </div>
         </div>
     </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section">
+        <div class="section-header">
+            <h2 class="section-title">My Projects</h2>
+            <p class="section-subtitle">A showcase of things I've built — from CLI tools to mobile apps.</p>
+        </div>
+
+        <div class="slider-container">
+            <button class="slider-btn slider-btn-left" onclick="slideProjects(-1)" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+
+            <div class="slider-viewport">
+                <div class="slider-track" id="sliderTrack">
+                    <!-- Slide 1: 2 projects -->
+                    <div class="slide">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/1a1a2e/6366f1?text=GoTubeCLI" alt="GoTubeCLI Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>GoTubeCLI</h3>
+                                <p>Go-based CLI application for downloading and processing YouTube media streams.</p>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/0f3460/e94560?text=NutriSnap" alt="NutriSnap Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>NutriSnap</h3>
+                                <p>Android app built with Flutter to detect food and analyze its nutritional content.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: 2 projects -->
+                    <div class="slide">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/16213e/0f3460?text=MugsCam" alt="MugsCam Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>MugsCam</h3>
+                                <p>A digital mugshot system prototype, detects age, gender, and race.</p>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/533483/e94560?text=RelaMudia" alt="RelaMudia Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>RelaMudia</h3>
+                                <p>Rental Alat Multimedia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: 2 projects -->
+                    <div class="slide">
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/1a1a2e/e94560?text=CheckYourMood" alt="CheckYourMood Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>CheckYourMood</h3>
+                                <p>Simple android app built in Java to check your daily mood.</p>
+                            </div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="https://placehold.co/600x340/0f3460/6366f1?text=ScannerQR" alt="ScannerQR Preview">
+                            </div>
+                            <div class="project-info">
+                                <h3>ScannerQR</h3>
+                                <p>Mobile app built in Flutter to scan QR to URL.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="slider-btn slider-btn-right" onclick="slideProjects(1)" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+
+        <div class="slider-dots" id="sliderDots">
+            <button class="dot active" onclick="goToSlide(0)"></button>
+            <button class="dot" onclick="goToSlide(1)"></button>
+            <button class="dot" onclick="goToSlide(2)"></button>
+        </div>
+    </section>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const track = document.getElementById('sliderTrack');
+        const dots = document.querySelectorAll('.dot');
+
+        function slideProjects(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        // Touch/swipe support
+        let startX = 0;
+        let isDragging = false;
+        const viewport = document.querySelector('.slider-viewport');
+
+        viewport.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        viewport.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                slideProjects(diff > 0 ? 1 : -1);
+            }
+            isDragging = false;
+        });
+    </script>
 </body>
 </html>
