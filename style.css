@@ -81,6 +81,7 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
+    align-items: center;
     gap: 2rem;
 }
 
@@ -94,6 +95,29 @@ body {
 
 .nav-links a:hover {
     color: var(--text-dark);
+}
+
+.nav-links .nav-contact-btn {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1.5px solid var(--primary-color);
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+
+.nav-links .nav-contact-btn:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+.nav-links .nav-contact-btn:active {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
 }
 
 /* Hero Section */
