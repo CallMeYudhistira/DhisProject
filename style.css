@@ -241,6 +241,7 @@ body {
     padding: 6rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    height: 100vh;
 }
 
 .section-header {
@@ -288,7 +289,7 @@ body {
 }
 
 .skill-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-color: rgba(99, 102, 241, 0.3); /* using primary-color */
 }
@@ -335,6 +336,7 @@ body {
     padding: 6rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    height: 100vh;
 }
 
 .slider-container {
@@ -486,5 +488,205 @@ body {
 
     .projects-section {
         padding: 4rem 1rem;
+    }
+}
+
+/* Experience Section */
+.experience-section {
+    padding: 6rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+.experience-timeline {
+    position: relative;
+}
+
+.exp-item {
+    display: grid;
+    grid-template-columns: 180px 40px 1fr;
+    gap: 0;
+    position: relative;
+}
+
+/* Left side — Period */
+.exp-period {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 0.25rem;
+    padding-right: 1.5rem;
+}
+
+.exp-date {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.exp-duration {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+/* Center — Line & Dot */
+.exp-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.exp-line::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary-color), transparent);
+}
+
+.exp-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--primary-color), 0 2px 8px rgba(99, 102, 241, 0.3);
+    flex-shrink: 0;
+    margin-top: 0.35rem;
+    z-index: 1;
+}
+
+/* Right side — Content */
+.exp-content {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-left: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.exp-content:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -3px rgba(0, 0, 0, 0.04);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+.exp-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.exp-role {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.exp-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+}
+
+.exp-company {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    margin-bottom: 1.25rem;
+}
+
+.exp-tasks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.exp-tasks li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-gray);
+    line-height: 1.6;
+}
+
+.exp-tasks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.6;
+}
+
+.exp-cert-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.06);
+    transition: all 0.3s ease;
+}
+
+.exp-cert-link:hover {
+    background: rgba(99, 102, 241, 0.15);
+    transform: translateX(4px);
+}
+
+.exp-cert-link svg {
+    flex-shrink: 0;
+}
+
+/* Experience Responsive */
+@media (max-width: 768px) {
+    .exp-item {
+        grid-template-columns: 30px 1fr;
+    }
+
+    .exp-period {
+        display: none;
+    }
+
+    .exp-content::before {
+        content: attr(data-period);
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .exp-content {
+        margin-left: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .experience-section {
+        padding: 4rem 1rem;
+    }
+
+    .exp-content {
+        padding: 1.5rem;
     }
 }
